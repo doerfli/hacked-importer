@@ -4,16 +4,19 @@
     android:id="@+id/activity_account_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="li.doerf.hackedimporter.AccountListActivity">
 
-
     <Button
-        android:id="@+id/clickme"
+        android:id="@+id/importaccounts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click me" />
+        android:text="Import" />
+
+    <ListView
+        android:layout_below="@id/importaccounts"
+        android:id="@+id/accounts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
 </RelativeLayout>
