@@ -4,6 +4,8 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static android.content.Context.ACCOUNT_SERVICE;
 import static li.doerf.hackedimporter.R.id.accounts;
 
 public class AccountListActivity extends AppCompatActivity {
@@ -34,13 +38,17 @@ public class AccountListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_list);
 
-        Button importAccounts = (Button) findViewById(R.id.importaccounts);
+        Button importAccounts = (Button) findViewById(R.id.searchaccounts);
         importAccounts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if ( getCallingActivity() == null ) {
+                    Toast.makeText(getApplicationContext(), "Please call this app from Hacked?", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 Intent resultIntent = new Intent();
                 resultIntent.putStringArrayListExtra("accounts", accounts);
-                // TODO Add extras or a data URI to this intent as appropriate.
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
 
@@ -50,19 +58,32 @@ public class AccountListActivity extends AppCompatActivity {
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.GET_ACCOUNTS},
-                    PERMISSIONS_REQUEST_GET_ACCOUNT);
-            Log.d( LOGTAG, "no permission");
-            return;
+            Log.v(LOGTAG, "permission READ_PHONE_STATE denied");
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.GET_ACCOUNTS)) {
+                Log.v(LOGTAG, "show permission rationale");
+                final Activity thisActivity = this;
+                new AlertDialog.Builder(this)
+                        .setTitle( getString( R.string.dialog_permission_request_title))
+                        .setMessage(getString( R.string.dialog_permission_request_GET_ACCOUNT))
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ActivityCompat.requestPermissions( thisActivity,
+                                        new String[]{Manifest.permission.GET_ACCOUNTS},
+                                        PERMISSIONS_REQUEST_GET_ACCOUNT);
+                            }
+                        }).show();
+            } else {
+                Log.i(LOGTAG, "request permission READ_PHONE_STATE");
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.GET_ACCOUNTS},
+                        PERMISSIONS_REQUEST_GET_ACCOUNT);
+            }
         }
+
+        Log.d(LOGTAG, "permission granted");
 
         accounts = new ArrayList<>();
 
@@ -74,6 +95,10 @@ public class AccountListActivity extends AppCompatActivity {
 
             // TODO check for right type
             accounts.add(account.name);
+        }
+
+        if ( accounts.size() == 0 ) {
+            accounts.add(getString(R.string.no_accounts_found));
         }
 
         ArrayAdapter<String> accountAdapter =

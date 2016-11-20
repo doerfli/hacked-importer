@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Hacked Importer</string>
+    <string name="app_name">Hacked? - Search accounts</string>
+    <string name="import_accounts">Import accounts</string>
+    <string name="dialog_permission_request_title">Permission request</string>
+    <string name="dialog_permission_request_GET_ACCOUNT">This application requires access to your accounts to search for account names. Please allow the app access in the next dialog.</string>
+    <string name="ok">Ok</string>
+    <string name="no_accounts_found">No accounts found on this device</string>
 </resources>

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HackedImporter.iml" filepath="$PROJECT_DIR$/HackedImporter.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hacked-importer.iml" filepath="$PROJECT_DIR$/hacked-importer.iml" />
     </modules>
   </component>
 </project>
