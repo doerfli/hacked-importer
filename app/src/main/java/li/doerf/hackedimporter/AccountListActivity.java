@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,19 +18,29 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.common.collect.Maps;
 
-import static android.content.Context.ACCOUNT_SERVICE;
-import static li.doerf.hackedimporter.R.id.accounts;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class AccountListActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_GET_ACCOUNT = 1;
     private final String LOGTAG = "AccountListActivity";
     private ArrayList<String> accounts;
+    private static Map<String,String> myRecognizedAcocunts;
+
+    static {
+        myRecognizedAcocunts = Maps.newHashMap();
+        myRecognizedAcocunts.put( "com.google", "Google");
+        myRecognizedAcocunts.put( "com.facebook.auth.login", "Facebook");
+        myRecognizedAcocunts.put( "com.twitter.android.auth.login", "Twitter");
+        myRecognizedAcocunts.put( "com.linkedin.android", "Linkedin");
+        myRecognizedAcocunts.put( "com.reddit.account", "Reddit");
+        myRecognizedAcocunts.put( "com.booking.dcl", "Booking");
+        myRecognizedAcocunts.put( "com.tripadvisor.tripadvisor", "Tripadvisor");
+        myRecognizedAcocunts.put( "com.evernote", "Evernote");
+        myRecognizedAcocunts.put( "com.getpebble.android.basalt", "Pebble");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +98,17 @@ public class AccountListActivity extends AppCompatActivity {
 
         Account[] list = manager.getAccounts();
         for ( Account account : list) {
+            Log.d(LOGTAG, "type: " + account.type + " - account name: " + account.name);
             if ( accounts.contains( account.name) ) {
                 continue;
             }
 
-            // TODO check for right type
+            if ( ! myRecognizedAcocunts.containsKey(account.type) ) {
+                Log.i( LOGTAG, "unrecognized type: " + account.type);
+                continue;
+            }
+
+            Log.i( LOGTAG, "recognized type: " + account.type);
             accounts.add(account.name);
         }
 
