@@ -27,19 +27,19 @@ public class AccountListActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_GET_ACCOUNT = 1;
     private final String LOGTAG = "AccountListActivity";
     private ArrayList<String> accounts;
-    private static Map<String,String> myRecognizedAcocunts;
+    private static Map<String,String> myRecognizedAccounts;
 
     static {
-        myRecognizedAcocunts = Maps.newHashMap();
-        myRecognizedAcocunts.put( "com.google", "Google");
-        myRecognizedAcocunts.put( "com.facebook.auth.login", "Facebook");
-        myRecognizedAcocunts.put( "com.twitter.android.auth.login", "Twitter");
-        myRecognizedAcocunts.put( "com.linkedin.android", "Linkedin");
-        myRecognizedAcocunts.put( "com.reddit.account", "Reddit");
-        myRecognizedAcocunts.put( "com.booking.dcl", "Booking");
-        myRecognizedAcocunts.put( "com.tripadvisor.tripadvisor", "Tripadvisor");
-        myRecognizedAcocunts.put( "com.evernote", "Evernote");
-        myRecognizedAcocunts.put( "com.getpebble.android.basalt", "Pebble");
+        myRecognizedAccounts = Maps.newHashMap();
+        myRecognizedAccounts.put( "com.google", "Google");
+        myRecognizedAccounts.put( "com.facebook.auth.login", "Facebook");
+        myRecognizedAccounts.put( "com.twitter.android.auth.login", "Twitter");
+        myRecognizedAccounts.put( "com.linkedin.android", "Linkedin");
+        myRecognizedAccounts.put( "com.reddit.account", "Reddit");
+        myRecognizedAccounts.put( "com.booking.dcl", "Booking");
+        myRecognizedAccounts.put( "com.tripadvisor.tripadvisor", "Tripadvisor");
+        myRecognizedAccounts.put( "com.evernote", "Evernote");
+        myRecognizedAccounts.put( "com.getpebble.android.basalt", "Pebble");
     }
 
     @Override
@@ -103,7 +103,7 @@ public class AccountListActivity extends AppCompatActivity {
                 continue;
             }
 
-            if ( ! myRecognizedAcocunts.containsKey(account.type) ) {
+            if ( ! myRecognizedAccounts.containsKey(account.type) ) {
                 Log.i( LOGTAG, "unrecognized type: " + account.type);
                 continue;
             }
